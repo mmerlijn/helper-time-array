@@ -17,7 +17,7 @@ Example
 
 ### Requirements
 
-- PHP 7.3|8.0
+- PHP 8.0
 
 ### Installation
 
