@@ -14,6 +14,19 @@ final class BasicTest extends TestCase
         $ta = new TimeArray();
         self::assertTrue($ta instanceof TimeArray);
     }
+    public function test_initialisation()
+    {
+        $ta = new TimeArray([500,600]);
+        $this->assertSame([[500,600]],$ta->get());
+        $ta = new TimeArray([[600,700]]);
+        $this->assertSame([[600,700]],$ta->get());
+    }
+    public function test_create_method()
+    {
+        $ta = new TimeArray();
+        $ta->create([500,600]);
+        $this->assertSame([[500,600]],$ta->get());
+    }
     public function test_get_result()
     {
         $ta = new TimeArray();

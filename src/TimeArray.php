@@ -7,9 +7,11 @@ class TimeArray
     //private array $problemArray = [];
     //private bool $problem = false;
 
-    public function __construct(array $timeArray=[])
+    public function __construct(?array $timeArray=null)
     {
-        $this->timeArray= $timeArray;
+        if($timeArray){
+            $this->create($timeArray);
+        }
     }
 
     /** Initialising timeArray
