@@ -2,7 +2,6 @@
 
 namespace mmerlijn\helperTimeArray\tests\Unit;
 
-use Cassandra\Time;
 use mmerlijn\helperTimeArray\tests\TestCase;
 use mmerlijn\helperTimeArray\TimeArray;
 
@@ -54,6 +53,13 @@ final class BasicTest extends TestCase
         $ta = new TimeArray();
         $ta = $ta->add([600,800])->subtract([700,750]);
         $this->assertSame([[600,700],[750,800]], $ta->get());
+    }
+    public function test_substract_whole_time()
+    {
+        $ta = new TimeArray();
+        $ta = $ta->create([500,600])->subtract([0,1440])->get();
+        $this->assertEquals([], $ta);
+
     }
 
 }
