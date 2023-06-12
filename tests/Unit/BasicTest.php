@@ -59,7 +59,11 @@ final class BasicTest extends TestCase
         $ta = new TimeArray();
         $ta = $ta->create([500,600])->subtract([0,1440])->get();
         $this->assertEquals([], $ta);
-
     }
-
+    public function test_to_string()
+    {
+        $ta = new TimeArray();
+        $ta = $ta->create([500,600])->add([700,800]);
+        $this->assertEquals("[[500,600],[700,800]]", (string)$ta);
+    }
 }

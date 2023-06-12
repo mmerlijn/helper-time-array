@@ -7,9 +7,9 @@ class TimeArray
     //private array $problemArray = [];
     //private bool $problem = false;
 
-    public function __construct(?array $timeArray=null)
+    public function __construct(?array $timeArray = null)
     {
-        if($timeArray){
+        if ($timeArray) {
             $this->create($timeArray);
         }
     }
@@ -153,6 +153,15 @@ class TimeArray
         if ($length != count($this->timeArray)) {
             $this->compact();
         }
+    }
+
+    public function __toString()
+    {
+        $tmp= [];
+        foreach ($this->timeArray as $a){
+            $tmp[] = "[".implode(",", $a)."]";
+        }
+        return "[".implode(",", $tmp)."]";
     }
 // Use of problem array's should be evaluated
 //    /** same as compact, but for the problemArray
