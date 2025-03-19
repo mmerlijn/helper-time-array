@@ -4,8 +4,6 @@ namespace mmerlijn\helperTimeArray;
 class TimeArray
 {
     private array $timeArray = [];
-    //private array $problemArray = [];
-    //private bool $problem = false;
 
     public function __construct(?array $timeArray = null)
     {
@@ -125,28 +123,24 @@ class TimeArray
     /**joins the timeArray if end time and start time are equal or overlap
      * @return void
      */
+
     private function compact(): void
     {
-        $length = count($this->timeArray);
         sort($this->timeArray);
-        for ($i = 1; $i < count($this->timeArray); $i++) {
-            list($s_, $e_) = $this->timeArray[$i - 1];
-            list($s, $e) = $this->timeArray[$i];
-            if ($s_ == $s) {
-                if ($e_ > $e) {
-                    unset($this->timeArray[$i]);
-                } else {
-                    unset($this->timeArray[$i - 1]);
-                }
+        $length = count($this->timeArray);
+        foreach ($this->timeArray as $k=>$ta){
+            if($ta[0]>=$ta[1]){
+                unset($this->timeArray[$k]);
                 break;
-            } elseif ($e_ >= $s) {
-                if ($e_ > $e) {
-                    $this->timeArray[$i - 1] = [$s_, $e_];
-                    unset($this->timeArray[$i]);
-                } else {
-                    $this->timeArray[$i - 1] = [$s_, $e];
-                    unset($this->timeArray[$i]);
-                }
+            }
+            if(array_key_last($this->timeArray)==$k){
+                break;
+            }
+            list($s_, $e_) = $ta;
+            list($s, $e) = $this->timeArray[$k+1];
+            if ($e_ >= $s) { //same start time
+                $this->timeArray[$k] = [$s_, max($e_, $e)];
+                unset($this->timeArray[$k+1]);
                 break;
             }
         }
@@ -163,88 +157,19 @@ class TimeArray
         }
         return "[".implode(",", $tmp)."]";
     }
-// Use of problem array's should be evaluated
-//    /** same as compact, but for the problemArray
-//     * @return void
-//     */
-//    private function compactProblem(): void
-//    {
-//        $length = count($this->problemArray);
-//        sort($this->problemArray);
-//        for ($i = 1; $i < count($this->problemArray); $i++) {
-//            list($s_, $e_) = $this->problemArray[$i - 1];
-//            list($s, $e) = $this->problemArray[$i];
-//            if ($s_ == $s) {
-//                if ($e_ > $e) {
-//                    unset($this->problemArray[$i]);
-//                } else {
-//                    unset($this->problemArray[$i - 1]);
-//                }
-//                break;
-//            } elseif ($e_ >= $s) {
-//                if ($e_ > $e) {
-//                    $this->problemArray[$i - 1] = [$s_, $e_];
-//                    unset($this->problemArray[$i]);
-//                } else {
-//                    $this->problemArray[$i - 1] = [$s_, $e];
-//                    unset($this->problemArray[$i]);
-//                }
-//                break;
-//            }
-//        }
-//        if ($length != count($this->problemArray)) {
-//            $this->compact();
-//        }
-//    }
-//
-//    /** search of $times is in de timeArray, set the problemArray and problem if not present
-//     * @param array $times
-//     * @return TimeArray
-//     */
-//    public function checkProblem(array $times): TimeArray
-//    {
-//        $problem = true;
-//        list($s_, $e_) = $times;
-//        foreach ($this->timeArray as $time) {
-//            list($s, $e) = $time;
-//            if ($s_ >= $s and $e_ <= $e) {
-//                $problem = false;
-//            }
-//        }
-//        if ($problem) {
-//            $this->problem = true;
-//            $this->problemArray[] = $times;
-//        }
-//        return $this;
-//    }
-//
-//    /** check for problems with a multiple timesArray as input
-//     * @param array $timesArray
-//     * @return TimeArray
-//     */
-//    public function checkProblems(array $timesArray): TimeArray
-//    {
-//        foreach ($timesArray as $times) {
-//            $this->checkProblem($times);
-//        }
-//        return $this;
-//    }
-//
-//    /** Checks if problems are presented
-//     * @return bool
-//     */
-//    public function isProblem(): bool
-//    {
-//        return $this->problem;
-//    }
-//
-//    /** Returns a timeArray with problems
-//     * @return array
-//     */
-//    public function getProblems(): array
-//    {
-//        $this->compactProblem();
-//        return $this->problemArray;
-//    }
+
+    public function intersect(array $times): TimeArray
+    {
+        $intersect = [];
+        foreach ($this->timeArray as $time) {
+            foreach ($times as $time2) {
+                $intersect[] = [max($time[0], $time2[0]), min($time[1], $time2[1])];
+            }
+        }
+        $this->timeArray = $intersect;
+        $this->compact();
+        return $this;
+    }
+
 
 }

@@ -66,4 +66,27 @@ final class BasicTest extends TestCase
         $ta = $ta->create([500,600])->add([700,800]);
         $this->assertEquals("[[500,600],[700,800]]", (string)$ta);
     }
+    public function test_intersect()
+    {
+        $ta = new TimeArray([[500,600],[700,800]]);
+        $this->assertEquals([[500,600],[700,800]], $ta->intersect([[500,600],[700,800]])->get());
+
+        $ta = new TimeArray([[500,600],[700,800]]);
+        $this->assertEquals([[700,800]], $ta->intersect([[700,800]])->get());
+
+        $ta = new TimeArray([[500,600],[700,800]]);
+        $this->assertEquals([[550,600],[700,750]], $ta->intersect([[550,750]])->get());
+
+        $ta = new TimeArray();
+        $this->assertEquals([], $ta->intersect([[550,750]])->get());
+
+        $ta = new TimeArray([[500,600],[700,800]]);
+        $this->assertEquals([[750,800]], $ta->intersect([[750,850]])->get());
+
+        $ta = new TimeArray([[500,600],[700,800]]);
+        $this->assertEquals([], $ta->intersect([[800,850]])->get());
+
+        $ta = new TimeArray([[500,600],[700,800]]);
+        $this->assertEquals([], $ta->intersect([[600,610],[800,810]])->get());
+    }
 }
