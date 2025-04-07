@@ -170,6 +170,20 @@ class TimeArray
         $this->compact();
         return $this;
     }
+    public function forHumans(): string
+    {
+        $result = [];
+        foreach ($this->timeArray as $time) {
+            $result[] = $this->int2Time($time[0]) . "-" . $this->int2Time($time[1]);
+        }
+        return implode(", ", $result);
+    }
+    private function int2Time(int $time): string
+    {
+        $hours = floor($time / 60);
+        $minutes = $time % 60;
+        return $hours . ':' . str_pad($minutes, 2, '0', STR_PAD_LEFT);
+    }
 
 
 }

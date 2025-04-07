@@ -89,4 +89,10 @@ final class BasicTest extends TestCase
         $ta = new TimeArray([[500,600],[700,800]]);
         $this->assertEquals([], $ta->intersect([[600,610],[800,810]])->get());
     }
+
+    public function test_human_readable()
+    {
+        $ta = new TimeArray([[500,600],[700,800]]);
+        $this->assertEquals('8:20-10:00, 11:40-13:20',$ta->forHumans());
+    }
 }
